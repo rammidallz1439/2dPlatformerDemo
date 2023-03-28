@@ -15,11 +15,15 @@ public class PlayerController : MonoBehaviour
     private Transform player;
 
     Vector2 movement;
-    Rigidbody2D rb;
+    
+    private Rigidbody2D rb;
     #endregion
 
 
-  
+  void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
     private void Update()
     {
         PlayerMovement();
@@ -32,11 +36,19 @@ public class PlayerController : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         movement = new Vector2(horizontal, movement.y).normalized;
-
+        if (horizontal!= 0)
+        {
+            anim.SetInteger("State",1);
+        }
+        else
+        {
+            anim.SetInteger("State", 0);
+        }
     }
 
     void Movement(Vector2 move)
     {
         rb.velocity = move * speed;
+
     }
 }
