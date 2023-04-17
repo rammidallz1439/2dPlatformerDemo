@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Game;
 public class PlayerController : MonoBehaviour
 {
     #region private Fields
@@ -21,19 +21,38 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
 
     bool isGrounded;
-   
+
+    [SerializeField]
+    private GameObject bullet;
+
+    [SerializeField]
+    private GameObject SpawnPoint;
+
+    bool canIdle;
     #endregion
 
 
   void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        canIdle = true;
     }
     private void Update()
     {
         PlayerMovement();
-     
-      
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            canIdle = false;
+            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Shoot, anim);
+           
+            Instantiate(bullet, SpawnPoint.transform.position, Quaternion.identity);
+            Invoke("PlayIdle", 1.5f);
+        }
+        else
+        {
+            canIdle = true;
+        }
 
     }
     private void FixedUpdate()
@@ -56,16 +75,17 @@ public class PlayerController : MonoBehaviour
        
         if (horizontal != 0 && isGrounded)
         {
-            anim.SetInteger("State",1);
+            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Run, anim);
         }
         else if(!isGrounded)
         {
-            anim.SetInteger("State", 2);
+            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Jump, anim);
         }
-        else
+        else if(isGrounded && canIdle)
         {
-            anim.SetInteger("State", 0);
+            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Idle, anim);
         }
+       
 
 
         if (horizontal < 0)
@@ -77,6 +97,11 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector2(1, 1);
         }
      
+    }
+
+    public void PlayIdle()
+    {
+        AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Idle, anim);
     }
     void Jump()
     {
