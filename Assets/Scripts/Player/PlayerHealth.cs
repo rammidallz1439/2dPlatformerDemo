@@ -33,9 +33,10 @@ public class PlayerHealth : HealthManager
     }
     IEnumerator SlowDownDecrease()
     {
-        yield return new WaitForSeconds(0.5f);
-        DecreaseHealth(d_Health * Time.deltaTime);
+        DecreaseHealth(d_Health);
         slider.value = health;
+        yield return new WaitForSeconds(0.5f);
+        
         if (canAttck)
         {
             StartCoroutine(SlowDownDecrease());

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
-    public float health = 10;
-    public float d_Health = 0.5f;
+    public float health = 50;
+    public float d_Health = 0.2f;
     public  bool canAttck;
     public void DecreaseHealth(float damage)
     {
