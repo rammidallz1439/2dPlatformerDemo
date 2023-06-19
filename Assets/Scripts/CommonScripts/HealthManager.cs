@@ -7,6 +7,8 @@ public class HealthManager : MonoBehaviour
     public float health = 50;
     public float d_Health = 0.2f;
     public  bool canAttck;
+
+    public static bool isDead;
     public void DecreaseHealth(float damage)
     {
         health -= damage;

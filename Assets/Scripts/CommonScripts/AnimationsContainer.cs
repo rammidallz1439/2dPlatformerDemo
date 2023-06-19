@@ -21,6 +21,7 @@ public class AnimationsContainer : MonoBehaviour
     public const string Enemy_Idle = "EnemyIdle";
     public const string Enemy_Walk = "Enemywalk";
     public const string Enemy_Attack = "EnemyAttack";
+    public const string Enemy_Dead = "EnemyDeath";
 
     #endregion
 

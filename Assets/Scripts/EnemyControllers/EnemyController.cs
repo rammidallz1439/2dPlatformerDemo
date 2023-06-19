@@ -47,7 +47,7 @@ public class EnemyController : MonoBehaviour
             transform.position = move;
 
 
-            if (transform.position.x != 0 )
+            if (transform.position.x != 0 && !HealthManager.isDead)
             {
                 AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Walk, anim);
             }
@@ -57,10 +57,11 @@ public class EnemyController : MonoBehaviour
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Attack, anim);
         }
-        else
+        else if (!HealthManager.isDead)
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Idle, anim);
         }
+       
 
 
 
