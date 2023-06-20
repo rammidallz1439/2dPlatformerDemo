@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : HealthManager
 {
     private Rigidbody2D rb;
     private Animator anim;
@@ -53,7 +53,7 @@ public class EnemyController : MonoBehaviour
             }
 
         }
-        else if (dist <=1 )
+        else if (dist <=1 && canAttck)
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Attack, anim);
         }

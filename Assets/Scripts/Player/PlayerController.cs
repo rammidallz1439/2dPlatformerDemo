@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private GameObject SpawnPoint;
 
     bool canIdle;
+
+   
+
     #endregion
 
 
