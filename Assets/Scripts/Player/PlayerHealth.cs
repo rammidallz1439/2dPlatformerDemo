@@ -7,8 +7,8 @@ public class PlayerHealth : HealthManager
 {
    
   
-    [SerializeField]
-    private Slider slider;
+   
+    public Slider slider;
 
     private Animator anim;
 
@@ -16,7 +16,7 @@ public class PlayerHealth : HealthManager
     {
         anim = transform.GetComponentInChildren<Animator>();
         slider.value = health;
-        UiManager.instance.GameOverPanel.SetActive(false);
+       // UiManager.instance.GameOverPanel.SetActive(false);
     }
 
     private void Update()
@@ -25,8 +25,8 @@ public class PlayerHealth : HealthManager
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Dead, anim);
             UiManager.instance.GameOverPanel.SetActive(true);
-            Invoke("DestroyPlayer", 1f);
-            canAttck = false;
+            Invoke("DestroyPlayer", 0.5f);
+           
         }
     }
 
@@ -42,15 +42,12 @@ public class PlayerHealth : HealthManager
             {
                
                 StartCoroutine(SlowDownDecrease());
-                canAttck = true;
+                
             }
            
         }
     }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        canAttck = false;
-    }
+  
     IEnumerator SlowDownDecrease()
     {
         DecreaseHealth(d_Health);

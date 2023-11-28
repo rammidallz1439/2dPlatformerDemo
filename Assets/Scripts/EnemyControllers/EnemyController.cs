@@ -53,11 +53,11 @@ public class EnemyController : HealthManager
             }
 
         }
-        else if (dist <=1 && canAttck)
+        else if (dist <= 1 && canAttck)
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Attack, anim);
         }
-        else if (!HealthManager.isDead)
+        else if (!HealthManager.isDead )
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Enemy_Idle, anim);
         }
@@ -67,6 +67,19 @@ public class EnemyController : HealthManager
 
 
     }
-
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            canAttck = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            canAttck = false;
+        }
+    }
 
 }

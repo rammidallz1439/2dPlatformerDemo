@@ -30,15 +30,25 @@ public class PlayerController : MonoBehaviour
 
     bool canIdle;
 
-   
+    public static bool isFlipped;
 
+    [SerializeField]
+    private PlayerHealth playerHealth;
+
+    private bool isShooting =false;
+    int score;
     #endregion
 
 
-  void Start()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        canIdle = true;
+        if (PlayerPrefs.HasKey("CoinData"))
+        {
+            score = PlayerPrefs.GetInt("CoinData");
+        }
+      
+        
     }
     private void Update()
     {
@@ -46,17 +56,29 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            isShooting = true;
             canIdle = false;
             AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Shoot, anim);
            
             Instantiate(bullet, SpawnPoint.transform.position, Quaternion.identity);
-            Invoke("PlayIdle", 1.5f);
+ 
         }
         else
         {
-            canIdle = true;
+            if (isShooting || !canIdle)
+            {
+                StartCoroutine(DelayAnims());
+            }
+           
         }
 
+    }
+
+    IEnumerator DelayAnims()
+    {
+        yield return new WaitForSeconds(0.6f);
+        isShooting = false;
+        canIdle = true;
     }
     private void FixedUpdate()
     {
@@ -76,17 +98,24 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         movement = new Vector2(horizontal, movement.y).normalized;
        
-        if (horizontal != 0 && isGrounded)
+        if (horizontal != 0 && isGrounded && !isShooting)
         {
-            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Run, anim);
+            
+                Invoke("PlayRun", 0.1f);
+           
+
         }
         else if(!isGrounded)
         {
             AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Jump, anim);
         }
-        else if(isGrounded && canIdle)
+        else if(isGrounded && canIdle && playerHealth.slider.value > 0 && !isShooting)
         {
-            AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Idle, anim);
+           
+                Invoke("PlayIdle", 0.1f);
+           
+               
+
         }
        
 
@@ -94,14 +123,19 @@ public class PlayerController : MonoBehaviour
         if (horizontal < 0)
         {
             transform.localScale = new Vector2(-1, 1);
+            isFlipped = true;
         }
         else if(horizontal !=0 && horizontal > 0)
         {
             transform.localScale = new Vector2(1, 1);
+            isFlipped = false;
         }
      
     }
-
+    public void PlayRun()
+    {
+        AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Run, anim);
+    }
     public void PlayIdle()
     {
         AnimationsManager.ChangeAnimations(AnimationsContainer.Player_Idle, anim);
@@ -131,5 +165,22 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "Coin")
+     {
+
+            score++;
+            GameManager.manager.AddScore(score);
+            PlayerPrefs.SetInt("CoinData", score);
+            
+        }
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine(DelayAnims());
     }
 }

@@ -10,11 +10,40 @@ public class Bullet : MonoBehaviour
     {
        
         Destroy(gameObject,2);
+        FlipBullet();
+
+
+    }
+
+
+    private void FlipBullet()
+    {
+        if (!PlayerController.isFlipped)
+        {
+         
+            transform.localScale = new Vector2(0.5f, 0.5f);
+
+        }
+        else
+        {
+
+            transform.localScale = new Vector2(-0.5f, 0.5f);
+
+        }
     }
    
-    private void LateUpdate()
+    private void Update()
     {
-        transform.position += new Vector3(bulletSpeed, 0f, 0f) * Time.deltaTime;
+        if (transform.localScale.x < 0)
+        {
+            transform.position += new Vector3(-bulletSpeed, 0f, 0f) * Time.deltaTime;
+        }
+        else
+            transform.position += new Vector3(bulletSpeed, 0f, 0f) * Time.deltaTime;
+
+
+
+
     }
 
 }
